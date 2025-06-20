@@ -1,0 +1,34 @@
+import React from "react";
+import { StyleProp, ViewStyle, TextStyle } from "react-native";
+export type DonutItem = {
+    name: string;
+    value: number;
+    color: string;
+};
+export type DonutAnimationType = "fade" | "slide";
+export type DonutAnimationTypeLabel = 'circular' | 'semi-circular';
+export type IDonutProps = {
+    data: DonutItem[];
+    containerWidth: number;
+    containerHeight: number;
+    radius: number;
+    startAngle?: number;
+    endAngle?: number;
+    strokeWidth?: number;
+    type?: "butt" | "round" | "square";
+    typeLabel?: any;
+    labelValueStyle?: StyleProp<TextStyle>;
+    labelTitleStyle?: StyleProp<TextStyle>;
+    labelWrapperStyle?: StyleProp<ViewStyle>;
+    containerStyle?: StyleProp<ViewStyle>;
+    animationType?: DonutAnimationType;
+    unit?: string;
+    styleName?: TextStyle;
+    styleValue?: TextStyle;
+    icon?: string;
+    switchSvg?: boolean;
+    animatedRight?: boolean;
+    disableAnimation?: boolean;
+    valueShow?: any;
+};
+export declare const DonutChart: ({ data, containerWidth, containerHeight, radius, startAngle, endAngle, strokeWidth, type, animationType, unit, typeLabel, labelWrapperStyle, labelValueStyle, labelTitleStyle, containerStyle, styleName, styleValue, icon, switchSvg, animatedRight, disableAnimation, valueShow }: IDonutProps) => React.JSX.Element;

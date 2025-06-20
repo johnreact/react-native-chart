@@ -1,0 +1,1 @@
+{"version":3,"names":["Coordinate","exports"],"sources":["Coordinate.tsx"],"sourcesContent":["export class Coordinate {}\n"],"mappings":";;;;;;AAAO,MAAMA,UAAU,CAAC;AAAEC,OAAA,CAAAD,UAAA,GAAAA,UAAA","ignoreList":[]}
