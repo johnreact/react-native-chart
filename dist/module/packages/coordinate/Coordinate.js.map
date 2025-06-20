@@ -1,0 +1,1 @@
+{"version":3,"sources":["Coordinate.tsx"],"names":["Coordinate"],"mappings":"AAAA,OAAO,MAAMA,UAAN,CAAiB","sourcesContent":["export class Coordinate {}\n"]}

@@ -1,0 +1,1 @@
+{"version":3,"file":"LinearInterpolation.d.ts","sourceRoot":"","sources":["../../../../src/packages/math/LinearInterpolation.tsx"],"names":[],"mappings":"AACA,wBAAgB,mBAAmB,CAAC,EAClC,KAAK,EACL,UAAU,EACV,WAAW,GACZ,EAAE;IACD,KAAK,EAAE,MAAM,CAAC;IACd,UAAU,EAAE,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC;IAC7B,WAAW,EAAE,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC;CAC/B,UAoBA"}

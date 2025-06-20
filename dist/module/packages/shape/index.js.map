@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.tsx"],"names":[],"mappings":"AAAA,cAAc,UAAd;AACA,cAAc,UAAd","sourcesContent":["export * from \"./Circle\";\nexport * from \"./Square\";\n"]}
