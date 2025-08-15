@@ -51,6 +51,7 @@ export type IDonutProps = {
   animatedRight?: boolean
   disableAnimation?: boolean,
   valueShow?: any
+  dataName?: any
 };
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -77,6 +78,7 @@ export const DonutChart = ({
   switchSvg = false,
   animatedRight,
   disableAnimation = true,
+  dataName,
   valueShow
 }: IDonutProps) => {
   let donutItemListeners: any = [];
@@ -94,10 +96,7 @@ export const DonutChart = ({
   const pathRefs = useRef<typeof AnimatedPath[]>([]);
   const animatedPaths = useRef<Array<Animated.Value>>([]).current;
 
-
-  
-
-  const [displayValue, setDisplayValue] = useState<DonutItem>(switchSvg ? data[1] : data[0]);
+  const [displayValue, setDisplayValue] = useState<DonutItem>(dataName ? dataName : switchSvg ? data[1] : data[0]);
 
   // TODO:
   // remove WTF is this variable ?
@@ -128,55 +127,55 @@ export const DonutChart = ({
 
     if (switchSvg) {
       animatedPaths.length = 0;
-  
+
       data.forEach((_, idx) => {
         const fromValues = sum(donutItemValueToPercentage.slice(0, idx));
         const toValues = sum(donutItemValueToPercentage.slice(0, idx + 1))
-    
+
         const start = LinearInterpolation({
           value: fromValues,
           ...defaultInterpolateConfig(),
         });
-    
+
         const end = LinearInterpolation({
           value: toValues,
           ...defaultInterpolateConfig(),
         });
-    
+
         rotationRange[idx] = { from: start, to: end };
-    
+
         animatedPaths.unshift(new Animated.Value(start));
       });
       setRotationPath(rotationRange);
     } else {
-    data.forEach((_, idx) => {
-      const fromValues = sum(donutItemValueToPercentage.slice(0, idx));
-      const toValues = sum(donutItemValueToPercentage.slice(0, idx + 1));
+      data.forEach((_, idx) => {
+        const fromValues = sum(donutItemValueToPercentage.slice(0, idx));
+        const toValues = sum(donutItemValueToPercentage.slice(0, idx + 1));
 
-      animatedPaths.push(
-        new Animated.Value(
-          LinearInterpolation({
+        animatedPaths.push(
+          new Animated.Value(
+            LinearInterpolation({
+              value: fromValues,
+              ...defaultInterpolateConfig(),
+            })
+          )
+        );
+
+        rotationRange[idx] = {
+          from: LinearInterpolation({
             value: fromValues,
             ...defaultInterpolateConfig(),
-          })
-        )
-      );
-
-      rotationRange[idx] = {
-        from: LinearInterpolation({
-          value: fromValues,
-          ...defaultInterpolateConfig(),
-        }),
-        to: LinearInterpolation({
-          value: toValues,
-          ...defaultInterpolateConfig(),
-        }),
-      };
-    });
-    setRotationPath(rotationRange);
+          }),
+          to: LinearInterpolation({
+            value: toValues,
+            ...defaultInterpolateConfig(),
+          }),
+        };
+      });
+      setRotationPath(rotationRange);
     }
 
-   
+
   }, [data]);
 
   useEffect(() => {
@@ -227,34 +226,34 @@ export const DonutChart = ({
           useNativeDriver: true,
         });
       });
-    
+
       Animated.parallel(animations).start();
     } else {
-        const animations: Animated.CompositeAnimation[] = data.map((_, i) => {
-      const ani = Animated.timing(animatedPaths[i], {
-        toValue: rotationPaths[i].to,
-        duration: 3000,
-        easing: Easing.bezier(0.075, 0.82, 0.165, 1),
-        useNativeDriver: true,
-      });
+      const animations: Animated.CompositeAnimation[] = data.map((_, i) => {
+        const ani = Animated.timing(animatedPaths[i], {
+          toValue: rotationPaths[i].to,
+          duration: 3000,
+          easing: Easing.bezier(0.075, 0.82, 0.165, 1),
+          useNativeDriver: true,
+        });
 
-      return ani;
-    });
-    Animated.parallel(animations).start();
+        return ani;
+      });
+      Animated.parallel(animations).start();
     }
 
     animationInProgress = true;
 
     const startAnimation = (index: number) => {
 
-    if (index >= animatedPaths.length || index > stepAnimated) {
-      animationInProgress = false; // Reset when all animations are done
-      return;
-    }
+      if (index >= animatedPaths.length || index > stepAnimated) {
+        animationInProgress = false; // Reset when all animations are done
+        return;
+      }
 
-    setTimeout(() => {
-      setStepAnimated(index);
-    }, 25);
+      setTimeout(() => {
+        setStepAnimated(index);
+      }, 25);
 
 
       Animated.timing(animatedPaths[index], {
@@ -264,9 +263,9 @@ export const DonutChart = ({
         useNativeDriver: true,
       }).start(() => {
         startAnimation(index + 1);
-       
+
       });
-  };
+    };
     startAnimation(0);
     setStepAnimated(0)
   };
@@ -391,7 +390,7 @@ export const DonutChart = ({
   ];
 
   const _getLabelWrapperStyle = (): Animated.WithAnimatedArray<any> => [
-    typeLabel === 'circular' ? styles.defaultLabelWrapper : styles.defaultLabelSemiCircular , 
+    typeLabel === 'circular' ? styles.defaultLabelWrapper : styles.defaultLabelSemiCircular,
     {
       width: squareInCircle.getCorner() - strokeWidth,
       height: squareInCircle.getCorner() - strokeWidth,
@@ -401,10 +400,10 @@ export const DonutChart = ({
   ];
 
   const _getLabelWrapperIconStyle = (): Animated.WithAnimatedArray<any> => [
- styles.defaultLabelIcon , 
+    styles.defaultLabelIcon,
     {
-      width:  radius * (Platform.OS ==='android' ? 1.5 : 1.55),
-      height: radius * (Platform.OS ==='android' ? 1.5 : 1.55),
+      width: radius * (Platform.OS === 'android' ? 1.5 : 1.55),
+      height: radius * (Platform.OS === 'android' ? 1.5 : 1.55),
       borderRadius: 120,
       backgroundColor: '#F4F8FC',
       opacity: animateOpacity,
@@ -436,7 +435,7 @@ export const DonutChart = ({
               d={drawPath}
               opacity={animateContainerOpacity}
               fill="none"
-              stroke={ stepAnimated < i && !disableAnimation ?  'white' : data[i].color}
+              stroke={stepAnimated < i && !disableAnimation ? 'white' : data[i].color}
               strokeWidth={animatedStrokeWidths[i]}
             />
           );
@@ -444,26 +443,26 @@ export const DonutChart = ({
       </Svg>
     )
   }, [rotationPaths, viewBox, stepAnimated, pathRefs.current, animateContainerOpacity, animatedStrokeWidths])
-  
+
 
   return (
     <Fragment>
       <View style={_getContainerStyle()}>
-      {renderSvg}
+        {renderSvg}
         {
-          icon !== '' ? 
-          <Animated.View style={_getLabelWrapperIconStyle()}>
-          <SvgXml xml={icon} />
-          </Animated.View>
-          :
-        <Animated.View style={_getLabelWrapperStyle()}>
-          <Text style={[_getLabelTitleStyle(displayValue?.color), {...styleName}]}>
-            {displayValue?.name}
-          </Text>
-          <Text style={[_getLabelValueStyle(displayValue?.color), {...styleValue}]}>
-            {valueShow.value} {unit}
-          </Text>
-        </Animated.View>
+          icon !== '' ?
+            <Animated.View style={_getLabelWrapperIconStyle()}>
+              <SvgXml xml={icon} />
+            </Animated.View>
+            :
+            <Animated.View style={_getLabelWrapperStyle()}>
+              <Text style={[_getLabelTitleStyle(displayValue?.color), { ...styleName }]}>
+                {displayValue?.name}
+              </Text>
+              <Text style={[_getLabelValueStyle(displayValue?.color), { ...styleValue }]}>
+                {valueShow.value} {unit}
+              </Text>
+            </Animated.View>
         }
       </View>
     </Fragment>
